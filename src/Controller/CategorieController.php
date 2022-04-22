@@ -16,7 +16,27 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class CategorieController extends AbstractController
 {
+    /**
+     *@Route("/categories", name="get_categories", methods={"GET"})
+     */
+    public function getCategories(ManagerRegistry $doctrine): Response
+    {
+        $repository = $doctrine->getRepository(Categorie::class);
+        $categories = $repository->findAll();
 
+ 
+        $data = [];
+ 
+        foreach ($categories as $categorie) {
+           $data[] = [
+               'id' => $categorie->getId(),
+               'libelle' => $categorie->getLibelle(),
+           ];
+        }
+
+ 
+        return $this->json($data);
+    }
     /**
      * @Route("/categories", name="add_categorie", methods={"POST"})
      */
