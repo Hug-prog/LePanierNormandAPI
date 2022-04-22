@@ -17,7 +17,7 @@ use Doctrine\Persistence\ManagerRegistry;
 class CategorieController extends AbstractController
 {
     /**
-     * @Route("/categories", name="add_categories", methods={"GET"})
+     * @Route("/categories", name="get_categories", methods={"GET"})
      */
     public function getCategorie(ManagerRegistry $doctrine): Response
     {
@@ -29,7 +29,7 @@ class CategorieController extends AbstractController
         foreach ($categories as $categorie) {
            $data[] = [
                'id' => $categorie->getId(),
-               'libelle' => $categorie->getlibelle(),
+               'libelle' => $categorie->getLibelle(),
            ];
         }
  
@@ -63,6 +63,23 @@ class CategorieController extends AbstractController
         }
         return $this->json($categorie->getLibelle());
     }
+
+     /**
+     * @Route("/categories/{id}", name="delete_categorie", methods={"DELETE"})
+     */
+    public function deleteCategorie(ManagerRegistry $doctrine,int $id): Response
+    {
+        $repository = $doctrine->getRepository(Categorie::class);
+        $categorie = $repository->find($id);
+        if (!$categorie) {
+            return $this->json('No orderState found for id' . $id, 404);
+        }
+        $repository->remove($categorie);
+        $repository->flush();
+ 
+        return $this->json('Deleted an orderState successfully ');
+    }
+
 
     /**
      * @Route("/categories/{id}", name="Update_categorie", methods={"PATCH"})
