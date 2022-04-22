@@ -34,9 +34,13 @@ class Product
     #[ORM\JoinColumn(nullable: false)]
     private $productSel;
 
+    #[ORM\ManyToMany(targetEntity: Order::class, mappedBy: 'products')]
+    private $orders;
+
     public function __construct()
     {
         $this->productCateg = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -124,6 +128,33 @@ class Product
     public function setProductSel(?Seller $productSel): self
     {
         $this->productSel = $productSel;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): self
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders[] = $order;
+            $order->addProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): self
+    {
+        if ($this->orders->removeElement($order)) {
+            $order->removeProduct($this);
+        }
 
         return $this;
     }

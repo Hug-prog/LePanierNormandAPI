@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Order;
 use App\Entity\OrderState;
+use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use \DateTimeImmutable;
 
@@ -50,6 +51,9 @@ class OrderController extends AbstractController
         $state = $doctrine->getRepository(OrderState::class)->find($request->request->get('stateId')); 
         $order->setState($state);
         $order->setTotalPrice($request->request->get('totalPrice'));
+        $order->setUser($request->request->get('userId'));
+        $state = $doctrine->getRepository(User::class)->find($request->request->get('userId'));
+
 
         $entityManager->persist($order);
         $entityManager->flush();
