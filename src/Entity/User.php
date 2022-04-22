@@ -3,100 +3,95 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 50)]
-    private $lastname;
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    private $email;
 
-    #[ORM\Column(type: 'string', length: 50)]
-    private $firstname;
+    #[ORM\Column(type: 'json')]
+    private $roles = [];
 
-    #[ORM\Column(type: 'string', length: 50)]
-    private $mail;
-
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string')]
     private $password;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'integer', length: 5)]
+    private $postCode;
+
+    #[ORM\Column(type: 'string', length: 50)]
     private $city;
 
     #[ORM\Column(type: 'integer')]
     private $houseNumber;
 
-    #[ORM\Column(type: 'integer')]
-    private $postCode;
-
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 50)]
     private $street;
 
-    #[ORM\ManyToMany(targetEntity: Role::class, inversedBy: 'users')]
-    private $roles;
+    #[ORM\Column(type: 'string', length: 50)]
+    private $firstname;
 
-    #[ORM\ManyToMany(targetEntity: Product::class)]
-    private $Products;
-
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class, orphanRemoval: true)]
-    private $Orders;
-
-    public function __construct()
-    {
-        $this->roles = new ArrayCollection();
-        $this->Products = new ArrayCollection();
-        $this->Orders = new ArrayCollection();
-    }
+    #[ORM\Column(type: 'string', length: 50)]
+    private $lastname;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getLastname(): ?string
+    public function getEmail(): ?string
     {
-        return $this->lastname;
+        return $this->email;
     }
 
-    public function setLastname(string $lastname): self
+    public function setEmail(string $email): self
     {
-        $this->lastname = $lastname;
+        $this->email = $email;
 
         return $this;
     }
 
-    public function getFirstname(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
     {
-        return $this->firstname;
+        return (string) $this->email;
     }
 
-    public function setFirstname(string $firstname): self
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
     {
-        $this->firstname = $firstname;
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
 
         return $this;
     }
 
-    public function getMail(): ?string
-    {
-        return $this->mail;
-    }
-
-    public function setMail(string $mail): self
-    {
-        $this->mail = $mail;
-
-        return $this;
-    }
-
-    public function getPassword(): ?string
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -104,6 +99,27 @@ class User
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function getPostCode(): ?int
+    {
+        return $this->postCode;
+    }
+
+    public function setPostCode(int $postCode): self
+    {
+        $this->postCode = $postCode;
 
         return $this;
     }
@@ -132,18 +148,6 @@ class User
         return $this;
     }
 
-    public function getPostCode(): ?int
-    {
-        return $this->postCode;
-    }
-
-    public function setPostCode(int $postCode): self
-    {
-        $this->postCode = $postCode;
-
-        return $this;
-    }
-
     public function getStreet(): ?string
     {
         return $this->street;
@@ -156,80 +160,26 @@ class User
         return $this;
     }
 
-    /**
-     * @return Collection<int, Role>
-     */
-    public function getRoles(): Collection
+    public function getFirstname(): ?string
     {
-        return $this->roles;
+        return $this->firstname;
     }
 
-    public function addRole(Role $role): self
+    public function setFirstname(string $firstname): self
     {
-        if (!$this->roles->contains($role)) {
-            $this->roles[] = $role;
-        }
+        $this->firstname = $firstname;
 
         return $this;
     }
 
-    public function removeRole(Role $role): self
+    public function getLastname(): ?string
     {
-        $this->roles->removeElement($role);
-
-        return $this;
+        return $this->lastname;
     }
 
-    /**
-     * @return Collection<int, Product>
-     */
-    public function getProducts(): Collection
+    public function setLastname(string $lastname): self
     {
-        return $this->Products;
-    }
-
-    public function addProduct(Product $product): self
-    {
-        if (!$this->Products->contains($product)) {
-            $this->Products[] = $product;
-        }
-
-        return $this;
-    }
-
-    public function removeProduct(Product $product): self
-    {
-        $this->Products->removeElement($product);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Order>
-     */
-    public function getOrders(): Collection
-    {
-        return $this->Orders;
-    }
-
-    public function addOrder(Order $order): self
-    {
-        if (!$this->Orders->contains($order)) {
-            $this->Orders[] = $order;
-            $order->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrder(Order $order): self
-    {
-        if ($this->Orders->removeElement($order)) {
-            // set the owning side to null (unless already changed)
-            if ($order->getUser() === $this) {
-                $order->setUser(null);
-            }
-        }
+        $this->lastname = $lastname;
 
         return $this;
     }

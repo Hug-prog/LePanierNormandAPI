@@ -54,7 +54,6 @@ class OrderController extends AbstractController
         $order->setUser($request->request->get('userId'));
         $state = $doctrine->getRepository(User::class)->find($request->request->get('userId'));
 
-
         $entityManager->persist($order);
         $entityManager->flush();
  
