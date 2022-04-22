@@ -37,6 +37,19 @@ class CategorieController extends AbstractController
         return $this->json($data);
     }
 
+ 
+        $data = [];
+ 
+        foreach ($categories as $categorie) {
+           $data[] = [
+               'id' => $categorie->getId(),
+               'libelle' => $categorie->getLibelle(),
+           ];
+        }
+
+ 
+        return $this->json($data);
+    }
     /**
      * @Route("/categories", name="add_categorie", methods={"POST"})
      */
