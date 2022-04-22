@@ -16,6 +16,26 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class CategorieController extends AbstractController
 {
+    /**
+     * @Route("/categories", name="add_categories", methods={"GET"})
+     */
+    public function getCategorie(ManagerRegistry $doctrine): Response
+    {
+        $repository = $doctrine->getRepository(Categorie::class);
+        $categories = $repository->findAll();
+        
+        $data = [];
+ 
+        foreach ($categories as $categorie) {
+           $data[] = [
+               'id' => $categorie->getId(),
+               'libelle' => $categorie->getlibelle(),
+           ];
+        }
+ 
+ 
+        return $this->json($data);
+    }
 
     /**
      * @Route("/categories", name="add_categorie", methods={"POST"})
@@ -31,5 +51,40 @@ class CategorieController extends AbstractController
  
         return $this->json($categorie->getLibelle());
     }
+
+     /**
+     * @Route("/categories/{id}", name="GET_categorie", methods={"GET"})
+     */
+    public function getCategorieById(ManagerRegistry $doctrine, int $id): Response
+    {
+        $repository = $doctrine->getRepository(Categorie::class);
+        $categorie = $repository->find($id);
+        if (!$categorie){
+            throw $this->createNotFoundException('No categorie found for this id');
+        }
+        return $this->json($categorie->getLibelle());
+    }
+
+    /**
+     * @Route("/categories/{id}", name="Update_categorie", methods={"PATCH"})
+     */
+
+     public function update(ManagerRegistry $doctrine,Request $request,int $id):Response
+     {
+        $entityManager = $doctrine->getManager();
+        $repository = $doctrine->getRepository(Categorie::class);
+        $categorie = $repository->find($id);
+
+        if (!$categorie){
+            throw $this->createNotFoundException('No categorie found for this id');
+        }
+
+        $categorie->setLibelle($request->request->get('libelle'));
+        $entityManager->persist($categorie);
+        $entityManager->flush();
+
+        return $this->json($categorie->getLibelle());
+     }
+
 }
 
