@@ -14,6 +14,10 @@
     "symfony/dotenv": "6.0.*",
     "symfony/flex": "^2",
     "symfony/framework-bundle": "6.0.*",
+<<<<<<< HEAD
+    "symfony/maker-bundle": "^1.39",
+=======
+>>>>>>> 6175d77fbb5e61d0fa754c4807527cac39c384e2
     "symfony/proxy-manager-bridge": "6.0.*",
     "symfony/runtime": "6.0.*",
     "symfony/yaml": "6.0.*"
@@ -69,8 +73,5 @@
       "allow-contrib": false,
       "require": "6.0.*"
     }
-  },
-  "require-dev": {
-    "symfony/maker-bundle": "^1.39"
   }
 }
