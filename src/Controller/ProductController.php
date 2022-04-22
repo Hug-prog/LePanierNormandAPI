@@ -26,16 +26,20 @@ class ProductController extends AbstractController
         $products = $repository->findAll();
         
         $data = [];
- 
+        
         foreach ($products as $product) {
+            $categories = [];
+            foreach($product->getProductCateg() as $categorie){ //get array categories
+                   $categories[]=$categorie->getLibelle();
+            }
            $data[] = [
                'id' => $product->getId(),
                'libelle' => $product->getlibelle(),
                'price' => $product->getPrice(),
                'stock'=> $product->getStock(),
                'description' => $product->getDescription(),
-               'categorie' => $product->getProductCateg(),
-               'seller' => $product->getProductSel()
+               'categorie' => $categories,
+               'seller' => $product->getProductSel()->getLibelle()
            ];
         }
  
@@ -46,7 +50,6 @@ class ProductController extends AbstractController
      */
     public function createProduct(ManagerRegistry $doctrine,Request $request): Response
     { 
-        //print_r($request->request);
         $entityManager = $doctrine->getManager();
         $product = new Product();
         $product->setLibelle($request->request->get('libelle'));
@@ -57,10 +60,8 @@ class ProductController extends AbstractController
         $seller = $doctrine->getRepository(Seller::class)->find($request->request->get('sellerId'));
         $product ->setProductSel($seller);
         
-        $categoriesId = $request->request->get('categoriesId');
-        print_r($categoriesId); 
+        $categoriesId = $request->request->all("categoriesId");
         foreach($categoriesId as $categorieId){
-            var_dump($categorieId);
             $categorie = $doctrine->getRepository(Categorie::class)->find($categorieId);
             $product->addProductCateg($categorie);   
         }
