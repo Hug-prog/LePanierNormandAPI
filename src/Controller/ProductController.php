@@ -84,7 +84,7 @@ class ProductController extends AbstractController
         }
         return $this->json($product->getLibelle());
     }
-
+    
      /**
      * @Route("/products/{id}", name="delete_product", methods={"DELETE"})
      */
