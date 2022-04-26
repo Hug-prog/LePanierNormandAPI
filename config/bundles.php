@@ -8,4 +8,5 @@ return [
     JMS\SerializerBundle\JMSSerializerBundle::class => ['all' => true],
     FOS\RestBundle\FOSRestBundle::class => ['all' => true],
     Symfony\Bundle\SecurityBundle\SecurityBundle::class => ['all' => true],
+    Nelmio\CorsBundle\NelmioCorsBundle::class => ['all' => true],
 ];
