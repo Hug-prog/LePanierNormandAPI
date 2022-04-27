@@ -37,6 +37,9 @@ class Product
     #[ORM\ManyToMany(targetEntity: Order::class, mappedBy: 'products')]
     private $orders;
 
+    #[ORM\Column(type: 'array')]
+    private $Images = [];
+
     public function __construct()
     {
         $this->productCateg = new ArrayCollection();
@@ -155,6 +158,18 @@ class Product
         if ($this->orders->removeElement($order)) {
             $order->removeProduct($this);
         }
+
+        return $this;
+    }
+
+    public function getImages(): ?array
+    {
+        return $this->Images;
+    }
+
+    public function setImages(array $Images): self
+    {
+        $this->Images = $Images;
 
         return $this;
     }

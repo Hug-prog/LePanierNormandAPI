@@ -10,6 +10,8 @@ use App\Entity\Product;
 use App\Entity\Seller;
 use App\Entity\Categorie;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Service\FileUploader;
+
 
 /**
  * @Route("/api", name="api_")
@@ -48,7 +50,7 @@ class ProductController extends AbstractController
     /**
      * @Route("/products", name="add_product", methods={"POST"})
      */
-    public function createProduct(ManagerRegistry $doctrine,Request $request): Response
+    public function createProduct(ManagerRegistry $doctrine,Request $request,FileUploader $fileUploader): Response
     { 
         $entityManager = $doctrine->getManager();
         $product = new Product();
@@ -65,6 +67,16 @@ class ProductController extends AbstractController
             $categorie = $doctrine->getRepository(Categorie::class)->find($categorieId);
             $product->addProductCateg($categorie);   
         }
+
+        $files = $request->files->all();
+        $productImages= array();
+        foreach($files['images'] as $file){
+            //$newFilename = $fileUploader->uploadImage($files["images"][0],'/product');
+            $newFilename = $fileUploader->uploadImage($file,'/product');
+            var_dump($newFilename); 
+            $productImages[] = $newFilename;
+        }
+        $product->setImages($productImages);
 
         $entityManager->persist($product);
         $entityManager->flush();
