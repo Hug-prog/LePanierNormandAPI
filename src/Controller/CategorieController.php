@@ -64,6 +64,29 @@ class CategorieController extends AbstractController
         return $this->json($categorie->getLibelle());
     }
 
+    /**
+     * @Route("/categories/{id}", name="GET_categorie", methods={"GET"})
+    */
+    public function  getProductsByCategoryId(ManagerRegistry $doctrine, int $id): Response
+    {
+        $repository = $doctrine->getRepository(Categorie::class);
+        $categorie = $repository->find($id);
+        if (!$categorie){
+            throw $this->createNotFoundException('No categorie found for this id');
+        }
+        $products = [];
+        
+        foreach($categorie->getProducts()as $product){
+            $products[]=[
+                'libelle'=> $product->getLibelle(),
+                'price' =>$product->getPrice(),
+                'stock'=>$product->getStock(),
+                'description'=>$product->getDescription()   
+            ];
+        }
+        return $this->json($products);
+    }
+
      /**
      * @Route("/categories/{id}", name="delete_categorie", methods={"DELETE"})
      */
