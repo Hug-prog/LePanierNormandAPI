@@ -41,7 +41,8 @@ class ProductController extends AbstractController
                'stock'=> $product->getStock(),
                'description' => $product->getDescription(),
                'categorie' => $categories,
-               'seller' => $product->getProductSel()->getLibelle()
+               'seller' => $product->getProductSel()->getLibelle(),
+               'images' => $product->getImages()
            ];
         }
  
@@ -71,9 +72,7 @@ class ProductController extends AbstractController
         $files = $request->files->all();
         $productImages= array();
         foreach($files['images'] as $file){
-            //$newFilename = $fileUploader->uploadImage($files["images"][0],'/product');
             $newFilename = $fileUploader->uploadImage($file,'/product');
-            var_dump($newFilename); 
             $productImages[] = $newFilename;
         }
         $product->setImages($productImages);
@@ -100,17 +99,21 @@ class ProductController extends AbstractController
      /**
      * @Route("/products/{id}", name="delete_product", methods={"DELETE"})
      */
-    public function deleteCategorie(ManagerRegistry $doctrine,int $id): Response
+    public function deleteProduct(ManagerRegistry $doctrine,int $id,FileUploader $fileUploader): Response
     {
         $repository = $doctrine->getRepository(Product::class);
-        $product = $repository->find($id);
+        $product = $repository->findOneBy(array('id'=>$id));
         if (!$product) {
-            return $this->json('No orderState found for id' . $id, 404);
+            return $this->json('No Product found for id' . $id, 404);
+        }
+        $images = $product->getImages();
+        foreach($images as $image){
+            $fileUploader->deleteImage('/product'.'/'.$image);
         }
         $repository->remove($product);
         $repository->flush();
  
-        return $this->json('Deleted an orderState successfully ');
+        return $this->json('Deleted an orderState successfully',200);
     }
 
 

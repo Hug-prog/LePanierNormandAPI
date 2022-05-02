@@ -9,12 +9,16 @@
     "ext-iconv": "*",
     "doctrine/doctrine-bundle": "^2.6",
     "doctrine/doctrine-migrations-bundle": "^3.2",
-    "doctrine/orm": "^2.11",
+    "doctrine/orm": "^2.12",
+    "doctrine/persistence": "^3.0",
     "friendsofsymfony/rest-bundle": "^3.3",
+    "gesdinet/jwt-refresh-token-bundle": "^1.1",
     "jms/serializer-bundle": "^4.0",
+    "lexik/jwt-authentication-bundle": "^2.15",
     "nelmio/cors-bundle": "^2.2",
     "symfony/console": "6.0.*",
     "symfony/dotenv": "6.0.*",
+    "symfony/filesystem": "6.0.*",
     "symfony/flex": "^2",
     "symfony/framework-bundle": "6.0.*",
     "symfony/maker-bundle": "^1.39",
@@ -69,7 +73,7 @@
   },
   "conflict": {
     "symfony/symfony": "*",
-    "doctrine/orm": "2.12.0"
+    "doctrine/orm": "<2.7"
   },
   "extra": {
     "symfony": {

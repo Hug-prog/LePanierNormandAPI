@@ -1,4 +1,3 @@
-# prettier-ignore
 # This file is the entry point to configure your own services.
 # Files in the packages/ subdirectory configure your dependencies.
 
@@ -23,3 +22,9 @@ services:
 
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones
+  # prettier-ignore
+
+  App\Listeners\AuthenticationSuccessListener:
+    arguments: ['%lexik_jwt_authentication.token_ttl%']
+    tags:
+        - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccess }

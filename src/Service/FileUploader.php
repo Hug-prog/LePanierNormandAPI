@@ -5,6 +5,7 @@ namespace App\Service;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
+
 class FileUploader
 {
     private $uploadsPath;
@@ -25,5 +26,12 @@ class FileUploader
         );
 
         return $newFilename;
+    }
+    public function deleteImage(string $path)
+    {
+        $imagePath = $this->uploadsPath.$path;
+        if(file_exists($imagePath)){
+            unlink($imagePath);
+        }
     }
 }

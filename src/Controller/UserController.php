@@ -39,23 +39,6 @@ class UserController extends AbstractController
  
         return $this->json("user has been created");
     }
-    /**
-     * @Route("/login", name="login_user", methods={"POST"})
-     */
-    public function loginUser(UserPasswordHasherInterface $passwordHasher,ManagerRegistry $doctrine,Request $request): Response
-    {
-        $repository = $doctrine->getRepository(User::class);
-        $user = $repository->findOneBy([
-            'email'=>$request->get('email'),
-    ]);
-    if (!$user || !$passwordHasher->isPasswordValid($user, $request->get('password'))) {
-            return $this->json([
-                'message' => 'email or password is wrong.',
-            ]);
-    }
-    return $this->json([
-        'message' => 'success!',
-        //'token' => sprintf('Bearer %s', $jwt),
-    ]);
-    }
+ 
+ 
 }
