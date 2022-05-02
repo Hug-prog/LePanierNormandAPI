@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Categorie;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Service\FileUploader;
+
 
 
 /**
@@ -39,11 +41,14 @@ class CategorieController extends AbstractController
     /**
      * @Route("/categories", name="add_categorie", methods={"POST"})
      */
-    public function createCategorie(ManagerRegistry $doctrine,Request $request): Response
+    public function createCategorie(ManagerRegistry $doctrine,Request $request,FileUploader $fileUploader): Response
     { 
         $entityManager = $doctrine->getManager();
         $categorie = new Categorie();
         $categorie->setLibelle($request->request->get('libelle'));
+        $file = $request->files->get('image');
+        $fileName = $fileUploader->uploadImage($file,'/categorie');
+        $categorie->setImage($fileName);
 
         $entityManager->persist($categorie);
         $entityManager->flush();
@@ -90,13 +95,16 @@ class CategorieController extends AbstractController
      /**
      * @Route("/categories/{id}", name="delete_categorie", methods={"DELETE"})
      */
-    public function deleteCategorie(ManagerRegistry $doctrine,int $id): Response
+    public function deleteCategorie(ManagerRegistry $doctrine,int $id,FileUploader $fileUploader): Response
     {
         $repository = $doctrine->getRepository(Categorie::class);
         $categorie = $repository->find($id);
         if (!$categorie) {
             return $this->json('No orderState found for id' . $id, 404);
         }
+        $image = $categorie->getImage();
+        $fileUploader->deleteImage('/categorie'.'/'.$image);
+
         $repository->remove($categorie);
         $repository->flush();
  
