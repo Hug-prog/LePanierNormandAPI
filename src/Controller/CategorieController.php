@@ -32,6 +32,7 @@ class CategorieController extends AbstractController
            $data[] = [
                'id' => $categorie->getId(),
                'libelle' => $categorie->getLibelle(),
+               'image' => $categorie->getImage()
            ];
         }
  
