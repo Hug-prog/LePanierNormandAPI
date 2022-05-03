@@ -43,7 +43,7 @@ class CategorieController extends AbstractController
      * @Route("/categories", name="add_categorie", methods={"POST"})
      */
     public function createCategorie(ManagerRegistry $doctrine,Request $request,FileUploader $fileUploader): Response
-    { 
+    {
         $entityManager = $doctrine->getManager();
         $categorie = new Categorie();
         $categorie->setLibelle($request->request->get('libelle'));
