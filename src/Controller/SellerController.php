@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Seller;
+use App\Service\FileUploader;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,7 +18,7 @@ class SellerController extends AbstractController
      /**
      * @Route("/sellers", name="add_seller", methods={"POST"})
      */
-    public function createSeller(ManagerRegistry $doctrine,Request $request): Response
+    public function createSeller(ManagerRegistry $doctrine,Request $request,FileUploader $fileUploader): Response
     { 
         $entityManager = $doctrine->getManager();
         $seller = new Seller();
@@ -26,6 +27,9 @@ class SellerController extends AbstractController
         $seller->setCity($request->request->get('city'));
         $seller->setHouseNumber($request->request->get('houseNumber'));
         $seller->setStreet($request->request->get('street'));
+        $file = $request->files->get('image');
+        $fileName = $fileUploader->uploadImage($file,'/seller');
+        $seller->setImage($fileName);
 
         $entityManager->persist($seller);
         $entityManager->flush();
@@ -68,13 +72,16 @@ class SellerController extends AbstractController
     /**
      * @Route("/sellers/{id}", name="delete_seller", methods={"DELETE"})
      */
-    public function deleteCategorie(ManagerRegistry $doctrine,int $id): Response
+    public function deleteSeler(ManagerRegistry $doctrine,int $id,FileUploader $fileUploader): Response
     {
         $repository = $doctrine->getRepository(Seller::class);
         $seller = $repository->find($id);
         if (!$seller) {
             return $this->json('No orderState found for id' . $id, 404);
         }
+        $image = $seller->getImage();
+        $fileUploader->deleteImage('/categorie'.'/'.$image);
+
         $repository->remove($seller);
         $repository->flush();
  

@@ -25,7 +25,7 @@ class UserController extends AbstractController
     { 
         $entityManager = $doctrine->getManager();
         $user = new User();
-        $user->setEmail($request->request->get('Email'));
+        $user->setEmail($request->request->get('email'));
         $user->setPassword($passwordHasher->hashPassword($user,$request->request->get('password')));
         $user->setFirstname($request->request->get('firstname'));
         $user->setLastname($request->request->get('lastname'));
