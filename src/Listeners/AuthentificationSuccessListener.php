@@ -20,8 +20,7 @@ class AuthenticationSuccessListener
         $data = $event->getData();
         
         $token=$data['token'];
-        unset($data['token']);
-        unset($data['refresh_token']);
+        //$refresh_token=$data['refresh_token'];
 
         $data['code'] = 200;
         $data['message'] = 'Request successful';
@@ -32,5 +31,10 @@ class AuthenticationSuccessListener
                 (new \DateTime())
                 ->add(new \DateInterval('PT' . $this->tokenTtl . 'S')), '/', null, $this->secure, true, false, 'none')
         );
+        /*$response->headers->setcookie(
+            new Cookie('refresh_token', $refresh_token,
+                (new \DateTime())
+                ->add(new \DateInterval('PT' .'56000'. 'S')), '/', null, $this->secure, true, false, 'none')
+        );*/
     }
 }

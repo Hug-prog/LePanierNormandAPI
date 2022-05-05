@@ -52,7 +52,8 @@ class SellerController extends AbstractController
                 'postCode'=>$seller->getPostCode(),
                 'city'=>$seller->getCity(),
                 'houseNumber'=>$seller->getHouseNumber(),
-                'street'=>$seller->getStreet()
+                'street'=>$seller->getStreet(),
+                'image'=>$seller->getImage()
             ];
         }
         return $this->json($data);
