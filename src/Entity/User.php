@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -41,6 +43,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'string', length: 50)]
     private $lastname;
+
+    #[ORM\ManyToMany(targetEntity: Product::class)]
+    private $likedProducts;
+
+    public function __construct()
+    {
+        $this->likedProducts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -187,6 +197,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastname(string $lastname): self
     {
         $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getLikedProducts(): Collection
+    {
+        return $this->likedProducts;
+    }
+
+    public function addLikedProduct(Product $likedProduct): self
+    {
+        if (!$this->likedProducts->contains($likedProduct)) {
+            $this->likedProducts[] = $likedProduct;
+        }
+
+        return $this;
+    }
+
+    public function removeLikedProduct(Product $likedProduct): self
+    {
+        $this->likedProducts->removeElement($likedProduct);
 
         return $this;
     }

@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 class RefreshedTokenListener implements EventSubscriberInterface {
 
     private $ttl;
-    private $secure = false;
+    private $secure = true;
 
     public function __construct($ttl)
     {
