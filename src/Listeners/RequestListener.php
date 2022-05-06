@@ -19,7 +19,7 @@ class RequestListener implements EventSubscriberInterface {
 
     public function onKernelRequest(RequestEvent $event) {
         $request = $event->getRequest();
-        $request->attributes->set('refresh_token', $request->cookies->get('REFRESH_TOKEN'));
+        $request->attributes->set('refresh_token', $request->cookies->get('refresh_token'));
     }
 
 }

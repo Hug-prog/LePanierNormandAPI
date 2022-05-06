@@ -20,7 +20,6 @@ class AuthenticationSuccessListener
         $data = $event->getData();
         
         $token=$data['token'];
-        //$refresh_token=$data['refresh_token'];
         unset($data['token']);
         unset($data['refresh_token']);
 

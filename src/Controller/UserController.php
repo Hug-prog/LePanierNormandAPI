@@ -39,6 +39,13 @@ class UserController extends AbstractController
  
         return $this->json("user has been created");
     }
- 
- 
+    /**
+     * @Route("/currentuser", name="get_user", methods={"GET"})
+     */
+    public function getCurrentUser(): Response
+    {
+        $userId=$this->getUser()->getId();
+        $queryData = ['userId' => $userId];
+        return $this->json($queryData);
+    }
 }
