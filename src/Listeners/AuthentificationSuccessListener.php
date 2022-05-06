@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 
 class AuthenticationSuccessListener
 {
-    private $secure = false;
+    private $secure = true;
     private $tokenTtl;
     public function __construct($tokenTtl)
     {
@@ -20,6 +20,7 @@ class AuthenticationSuccessListener
         $data = $event->getData();
         
         $token=$data['token'];
+        //$refresh_token=$data['refresh_token'];
         unset($data['token']);
         unset($data['refresh_token']);
 
@@ -32,5 +33,6 @@ class AuthenticationSuccessListener
                 (new \DateTime())
                 ->add(new \DateInterval('PT' . $this->tokenTtl . 'S')), '/', null, $this->secure, true, false, 'none')
         );
+        return $response;
     }
 }

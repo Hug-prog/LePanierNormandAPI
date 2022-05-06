@@ -36,7 +36,6 @@ class CategorieController extends AbstractController
            ];
         }
  
- 
         return $this->json($data);
     }
     /**
