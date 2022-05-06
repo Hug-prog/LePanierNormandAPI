@@ -79,8 +79,7 @@ class ProductController extends AbstractController
 
         $entityManager->persist($product);
         $entityManager->flush();
- 
-        return $this->json("create");
+        return $this->json(print_r($request->request));
     }
 
      /**
