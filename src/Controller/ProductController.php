@@ -41,7 +41,7 @@ class ProductController extends AbstractController
                'stock'=> $product->getStock(),
                'description' => $product->getDescription(),
                'categorie' => $categories,
-               'seller' => $product->getProductSel()->getLibelle(),
+               'seller' => $product->getProductSel()->getId(),
                'images' => $product->getImages()
            ];
         }
@@ -114,7 +114,4 @@ class ProductController extends AbstractController
  
         return $this->json('Deleted an orderState successfully',200);
     }
-
-
-
 }
