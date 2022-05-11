@@ -44,8 +44,16 @@ class UserController extends AbstractController
      */
     public function getCurrentUser(): Response
     {
-        $userId=$this->getUser()->getId();
-        $queryData = ['userId' => $userId];
+        $user=$this->getUser();
+        $queryData = [
+            'firstname' => $user->getFirstname(),
+            'lastname' => $user->getLastname(),
+            'email' => $user->getEmail(),
+            'houseNumber' => $user->getHouseNumber(),
+            'street' => $user->getStreet(),
+            'postCode' => $user->getPostCode(),
+            'city' => $user->getCity(),
+        ];
         return $this->json($queryData);
     }
 }

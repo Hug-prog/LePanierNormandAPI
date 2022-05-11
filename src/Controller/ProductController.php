@@ -92,7 +92,21 @@ class ProductController extends AbstractController
         if (!$product){
             throw $this->createNotFoundException('No categorie found for this id');
         }
-        return $this->json($product->getLibelle());
+        $categories = [];
+            foreach($product->getProductCateg() as $categorie){
+                   $categories[]=$categorie->getId();
+            }
+        $data = [
+            'id' => $product->getId(),
+            'libelle' => $product->getlibelle(),
+            'price' => $product->getPrice(),
+            'stock'=> $product->getStock(),
+            'description' => $product->getDescription(),
+            'categorie' => $product->getProductCateg(),
+            'seller' => $categories,
+            'images' => $product->getImages()
+        ];
+        return $this->json($data);
     }
     
      /**
