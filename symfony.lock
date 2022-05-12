@@ -169,6 +169,9 @@
     "stella-maris/clock": {
         "version": "0.1.4"
     },
+    "stripe/stripe-php": {
+        "version": "v8.1.0"
+    },
     "symfony/cache": {
         "version": "v6.0.6"
     },
