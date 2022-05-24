@@ -96,14 +96,19 @@ class ProductController extends AbstractController
             foreach($product->getProductCateg() as $categorie){
                    $categories[]=$categorie->getId();
             }
+        $seller = [
+            'id' => $product->getProductSel()->getId(),
+            'libelle' => $product->getProductSel()->getLibelle(),
+            'image' => $product->getProductSel()->getImage(),
+        ];
         $data = [
             'id' => $product->getId(),
             'libelle' => $product->getlibelle(),
             'price' => $product->getPrice(),
             'stock'=> $product->getStock(),
             'description' => $product->getDescription(),
-            'categorie' => $product->getProductCateg(),
-            'seller' => $categories,
+            'categories' => $product->getProductCateg(),
+            'seller' => $seller,
             'images' => $product->getImages()
         ];
         return $this->json($data);

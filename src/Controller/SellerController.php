@@ -68,7 +68,16 @@ class SellerController extends AbstractController
         if (!$seller){
             throw $this->createNotFoundException('No categorie found for this id');
         }
-        return $this->json($seller->getLibelle());
+        $data=[
+            'id'=>$seller->getId(),
+            'libelle'=>$seller->getLibelle(),
+            'postCode'=>$seller->getPostCode(),
+            'city'=>$seller->getCity(),
+            'houseNumber'=>$seller->getHouseNumber(),
+            'street'=>$seller->getStreet(),
+            'image'=>$seller->getImage()
+        ];
+        return $this->json($data);
     }
     /**
      * @Route("/sellers/{id}", name="delete_seller", methods={"DELETE"})
